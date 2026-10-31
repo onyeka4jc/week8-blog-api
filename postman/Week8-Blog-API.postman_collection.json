@@ -1,0 +1,113 @@
+{
+  "info": {
+    "_postman_id": "c194ab7a-75a2-4fe7-8b0f-6beef2b1e001",
+    "name": "Week 8 Blog API - MVC Refactor",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "articleId",
+      "value": "REPLACE_WITH_ARTICLE_ID"
+    }
+  ],
+  "item": [
+    {
+      "name": "API Status",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/"
+      }
+    },
+    {
+      "name": "Create Article",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Getting Started with Node.js\",\n  \"content\": \"Node.js allows developers to build fast and scalable backend applications using JavaScript.\",\n  \"author\": \"Jane Doe\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/articles"
+      }
+    },
+    {
+      "name": "Get All Articles",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/articles"
+      }
+    },
+    {
+      "name": "Search Articles",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/articles/search?q=Node",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "articles",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "Node"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Article by ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/articles/{{articleId}}"
+      }
+    },
+    {
+      "name": "Update Article",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated Node.js Article\",\n  \"content\": \"Node.js can be used to build scalable server-side applications with JavaScript.\",\n  \"author\": \"Jane Doe\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/articles/{{articleId}}"
+      }
+    },
+    {
+      "name": "Delete Article",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/articles/{{articleId}}"
+      }
+    }
+  ]
+}

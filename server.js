@@ -1,36 +1,38 @@
-require("dotenv").config();
+const env = require("./src/config/env");
+const mongoose = require("mongoose");
+const connectDB = require("./src/config/db");
+const app = require("./src/app");
 
-const express = require("express");
-const connectDB = require("./config/db");
-const articleRoutes = require("./routes/articleRoutes");
+let server;
 
-const app = express();
+const startServer = async () => {
+  try {
+    await connectDB();
 
-// Connect to MongoDB
-connectDB();
+    server = app.listen(env.port, "0.0.0.0", () => {
+      console.log(`Server running in ${env.nodeEnv} mode on port ${env.port}`);
+    });
+  } catch (error) {
+    console.error(`Application startup failed: ${error.message}`);
+    process.exitCode = 1;
+  }
+};
 
-// Middleware
-app.use(express.json());
+const shutDown = (signal) => {
+  console.log(`${signal} received. Shutting down gracefully...`);
 
-// Root route
-app.get("/", (req, res) => {
-  res.json({
-    message: "Week 8 Blog API is running",
+  if (!server) {
+    mongoose.disconnect().finally(() => process.exit(0));
+    return;
+  }
+
+  server.close(async () => {
+    await mongoose.disconnect();
+    process.exit(0);
   });
-});
+};
 
-// Article routes
-app.use("/articles", articleRoutes);
+process.on("SIGTERM", () => shutDown("SIGTERM"));
+process.on("SIGINT", () => shutDown("SIGINT"));
 
-// Handle unknown routes
-app.use((req, res) => {
-  res.status(404).json({
-    message: "Route not found",
-  });
-});
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
-});
+startServer();

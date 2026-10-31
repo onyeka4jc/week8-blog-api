@@ -8,14 +8,12 @@ const articleSchema = new mongoose.Schema(
       minlength: 5,
       trim: true,
     },
-
     content: {
       type: String,
       required: true,
       minlength: 20,
       trim: true,
     },
-
     author: {
       type: String,
       default: "Guest",
